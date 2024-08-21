@@ -5,26 +5,25 @@
  * @format
  */
 
-import React from 'react';
+import React, {useState} from 'react';
 import type {PropsWithChildren} from 'react';
 import {
   SafeAreaView,
   ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
   useColorScheme,
   View,
 } from 'react-native';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-import FlatCards from './components/FlatCards';
+import {Colors} from 'react-native/Libraries/NewAppScreen';
+import * as Yup from 'yup';
+const passwordValidation = Yup.object().shape({
+  passwordLength: Yup.number()
+    .min(4, 'should be minimum of 4 characters')
+    .max(16, 'shoud be maximum 16 characters')
+    .required('Length is required field '),
+});
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -58,6 +57,38 @@ function Section({children, title}: SectionProps): React.JSX.Element {
 
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
+  const [password, setPassword] = useState('');
+  const [isPassGenerated, setIsPassGenerated] = useState(false);
+  const [lowerCase, setLowerCase] = useState(true);
+  const [upperCase, setUpperCase] = useState(false);
+  const [number, useNumbers] = useState(false);
+  const [symbol, useSymbol] = useState(false);
+  const generatedPasswordString = (passLength: number) => {
+    let charset = '';
+    if (lowerCase) charset += 'abcdefghijklmnopqrstuvwxyz';
+    if (upperCase) charset += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    if (number) charset += '0123456789';
+    if (symbol) charset += '!@#$%^&*()';
+    let password = '';
+    for (let i = 0; i < passLength; i++) {
+      password += charset.charAt(Math.floor(Math.random() * charset.length));
+    }
+    return password;
+  };
+  const createPassword = (characterSet: string, passLength: number) => {
+    let password = '';
+    for (let i = 0; i < passLength; i++) {
+      password += characterSet.charAt(
+        Math.floor(Math.random() * characterSet.length),
+      );
+    }
+    setPassword(password);
+    setIsPassGenerated(true);
+  };
+  const resetPassword = () => {
+    setPassword('');
+    setIsPassGenerated(false);
+  };
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
@@ -66,19 +97,7 @@ function App(): React.JSX.Element {
   return (
     <SafeAreaView style={[backgroundStyle, styles.bodyContainer]}>
       <ScrollView>
-        <View>
-          <Text
-            style={{
-              fontSize: 20,
-              textTransform: `uppercase`,
-              marginTop: 20,
-              color: '#000',
-              fontWeight: 'bold',
-            }}>
-            Flat Cards.
-          </Text>
-        </View>
-        <FlatCards />
+        <Text>Hello !</Text>
       </ScrollView>
     </SafeAreaView>
   );
