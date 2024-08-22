@@ -71,7 +71,8 @@ function App(): React.JSX.Element {
     if (symbol) charset += '!@#$%^&*()';
 
     const passwordResult = createPassword(charset, passLength);
-    return passwordResult;
+    setPassword(passwordResult);
+    setIsPassGenerated(true);
   };
   const createPassword = (characterSet: string, passLength: number) => {
     let password = '';
@@ -81,12 +82,14 @@ function App(): React.JSX.Element {
       );
     }
     return password;
-    // setPassword(password);
-    // setIsPassGenerated(true);
   };
   const resetPassword = () => {
     setPassword('');
     setIsPassGenerated(false);
+    setUpperCase(false);
+    setLowerCase(false);
+    useNumbers(false);
+    useSymbol(false);
   };
 
   const backgroundStyle = {
