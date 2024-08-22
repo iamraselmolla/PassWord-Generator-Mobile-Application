@@ -69,11 +69,9 @@ function App(): React.JSX.Element {
     if (upperCase) charset += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     if (number) charset += '0123456789';
     if (symbol) charset += '!@#$%^&*()';
-    let password = '';
-    for (let i = 0; i < passLength; i++) {
-      password += charset.charAt(Math.floor(Math.random() * charset.length));
-    }
-    return password;
+
+    const passwordResult = createPassword(charset, passLength);
+    return passwordResult;
   };
   const createPassword = (characterSet: string, passLength: number) => {
     let password = '';
@@ -82,8 +80,9 @@ function App(): React.JSX.Element {
         Math.floor(Math.random() * characterSet.length),
       );
     }
-    setPassword(password);
-    setIsPassGenerated(true);
+    return password;
+    // setPassword(password);
+    // setIsPassGenerated(true);
   };
   const resetPassword = () => {
     setPassword('');
